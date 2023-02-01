@@ -5,10 +5,13 @@ import styled from 'styled-components'
 function ProductionDetail() {
   const [production, setProduction] = useState({crew_members:[], performers_and_roles:[]})
   const params = useParams()
+  console.log(params)
   
   useEffect(()=>{
     //GET to '/productions/:id'
- 
+    fetch(`/productions/${params.id}`)
+    .then(res => res.json())
+    .then(setProduction)
   },[])
   
  
