@@ -1,5 +1,6 @@
 class ProductionsController < ApplicationController
-    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity 
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     def index 
         render json: Production.all, status: :ok
@@ -17,7 +18,7 @@ class ProductionsController < ApplicationController
 
     def update 
         production = Production.find(params[:id])
-        production.update(production_params)
+        production.update!(production_params)
         render json: production, status: :accepted
     end 
 
@@ -35,7 +36,12 @@ class ProductionsController < ApplicationController
     end 
 
     def render_unprocessable_entity(invalid)
-        render json: {errors: invalid.record.errors}, status: :unprocessable_entity
+        errors_arr = invalid.record.errors.map{|key,value| "#{key} : #{value}"}
+        render json: {errors: errors_arr}, status: :unprocessable_entity
+    end 
+
+    def render_not_found
+        render json: {errors: "Production Not Found"}, status: :not_found
     end 
 
 end

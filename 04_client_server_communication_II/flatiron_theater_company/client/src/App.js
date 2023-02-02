@@ -51,6 +51,7 @@ function App() {
       </Route>
       
       <Route  path='/productions/:id/edit'>
+        
         <EditProductionForm updateProduction={updateProduction}/>
       </Route>
      

@@ -1,8 +1,9 @@
 import React, { useState} from 'react'
 import styled from 'styled-components'
+import {useHistory} from 'react-router-dom'
 
 
-function ProductionForm({addProduction}) {
+function ProductionForm({addProduction,edit}) {
   const [formData, setFormData] = useState({
     title:'',
     genre:'',
@@ -11,6 +12,8 @@ function ProductionForm({addProduction}) {
     director:'',
     description:''
   })
+  const [errors, setErrors] = useState([])
+  const history = useHistory()
 
 
   const handleChange = (e) => {
@@ -21,11 +24,43 @@ function ProductionForm({addProduction}) {
   function onSubmit(e){
     e.preventDefault()
     //POST '/productions'
-   
-  }
+    if(edit){
+      patchForm()
+    } else {
+      postForm()
+    }
   
+  }
+  function patchForm(){
+
+  }
+  function postForm(){
+    fetch('/productions',{
+      method: 'POST',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(formData)
+     })
+     .then(res => {
+      console.log(res)
+      if(res.ok){
+          res.json().then(data => {
+          addProduction(data)
+          history.push(`/productions/${data.id}`)
+        })
+      } else {
+        res.json().then(data => {
+          setErrors(data.errors)
+          // setErrors(Object.entries(data.errors).map(error => `${error[0]} : ${error[1]}`))
+        })
+      }
+     })
+  }
+  console.log(errors)
     return (
       <div className='App'>
+        {errors&& errors.map(error => <h2 style={{color:'red'}}>{error}</h2>)}
       <Form onSubmit={onSubmit}>
         <label>Title </label>
         <input type='text' name='title' value={formData.title} onChange={handleChange} />
@@ -45,7 +80,7 @@ function ProductionForm({addProduction}) {
         <label>Description</label>
         <textarea type='text' rows='4' cols='50' name='description' value={formData.description} onChange={handleChange} />
       
-        <input type='submit' value='Update Production' />
+        <input type='submit' value='Create Production' />
       </Form>
       </div>
     )
