@@ -2,8 +2,9 @@ class ProductionsController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
-    def index 
-        render json: Production.all, status: :ok
+    def index
+        render json: Production.all, status: :ok 
+        # render json: Production.all, include: :cast_members, except:[:created_at, :updated_at], status: :ok
     end 
 
     def show
@@ -35,7 +36,7 @@ class ProductionsController < ApplicationController
     end 
 
     def render_unprocessable_entity(invalid)
-        render json: {errors: invalid.record.errors}, status: :unprocessable_entity
+        render json: {errors: ErrorSerializer.serialize(invalid.record.errors)}, status: :unprocessable_entity
     end 
 
      def render_not_found(error)
