@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # resources :cast_members
   resources :productions, only: [ :index, :show, :create, :update, :destroy]
   # Custome Route
-  post "/login", to: "sessions#create" 
+  post "/login", to: "users#login" 
   # get "/welcome", to: "productions#welcome"
   # get "/welcome/:id", to: "productions#welcome_show"
 
