@@ -44,7 +44,7 @@ function App() {
   })
 
   const deleteProduction = (id) => setProductions(current => current.filter(p => p.id !== id)) 
-
+   const updateUser = () => console.log
   
   if(errors) return <h1>{errors}</h1>
 
