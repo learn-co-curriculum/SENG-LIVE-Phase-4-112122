@@ -1,13 +1,23 @@
 import { useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
-function Navigation() {
+function Navigation({updateUser}) {
   const [menu, setMenu] = useState(false)
+  const history = useHistory()
 
   const handleLogOut = () => {
     // DELETE `/logout`
+    fetch('/logout',{
+      method:'DELETE'
+    })
+    .then(res =>{
+      if(res.ok){
+        updateUser(null)
+        history.push('/login')
+      }
+    })
   }
   
     return (

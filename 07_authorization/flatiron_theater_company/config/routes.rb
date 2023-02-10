@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   resources :productions, only: [ :index, :show, :create, :update, :destroy]
   # Custome Route
   # Add auth routes here
+  post '/login', to: 'sessions#create'
+  delete '/logout', to:'sessions#destroy'
+  get '/authorized_user', to: 'users#show'
   
 
 end
